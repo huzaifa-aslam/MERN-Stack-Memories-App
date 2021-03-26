@@ -7,12 +7,11 @@ const Posts = () => {
   const { posts } = useSelector((state) => {
     return state.posts;
   });
-  console.log("posts", posts);
 
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!posts) {
+    if (!posts.length) {
       dispatch(fetchPostsAsync());
     }
   }, [dispatch, posts]);

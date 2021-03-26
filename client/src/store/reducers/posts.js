@@ -22,7 +22,7 @@ const postSlice = createSlice({
     },
     addNewPost: (state, action) => {
         const post = action.payload;
-        state.posts.unshift(post)
+        state.posts?.unshift(post)
         state.isLoading=false
     }
   },
@@ -47,10 +47,8 @@ export const fetchPostsAsync = () => async (dispatch) => {
 export const createPostsAsync = (post) => async (dispatch) => {
     try {
         dispatch(startLoading());
-        console.log("data", post);
-        const newData = await api.createPost(post);
-        console.log("newData",newData);
-        dispatch(getPosts(post));
+        await api.createPost(post);
+        dispatch(addNewPost(post));
         dispatch(donetLoading());
     } catch (error) {
         throw error
