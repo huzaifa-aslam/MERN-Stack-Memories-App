@@ -13,7 +13,7 @@ import MoriHorizIcon from "@material-ui/icons/MoreHoriz";
 import moment from "moment";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
-import { deletePostAsync } from "../../../store/reducers/posts";
+import { deletePostAsync, likePostAsync } from "../../../store/reducers/posts";
 
 const Post = ({ post, currentPostId, setCurrentPostId }) => {
   const dispatch = useDispatch();
@@ -51,14 +51,14 @@ const Post = ({ post, currentPostId, setCurrentPostId }) => {
         {post.title}
       </Typography>
       <CardContent>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="body2" color="textSecondary" component="p">
           {post.message}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button size="small" color="primary" onClick={() => {dispatch(likePostAsync(post))}}>
           <ThumbUpIcon fontSize="small" />
-          Like
+          &nbsp; Like &nbsp;
           {post.likeCount}
         </Button>
         <Button

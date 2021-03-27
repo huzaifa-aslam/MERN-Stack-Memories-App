@@ -87,6 +87,17 @@ export const updatePostAsync = (id, post) => async (dispatch) => {
   }
 };
 
+export const likePostAsync = (post) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await api.likePost(post._id);
+    dispatch(updatePost({ ...post }));
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deletePostAsync = (id) => async (dispatch) => {
   try {
     dispatch(startLoading());
