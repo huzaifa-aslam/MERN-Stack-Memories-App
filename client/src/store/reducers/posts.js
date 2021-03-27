@@ -34,6 +34,13 @@ const postSlice = createSlice({
       });
       return state;
     },
+    deletePost: (state, action) => {
+      const post = action.payload;
+      state.posts = state.posts?.filter((item, idx) => {
+        return item._id !== post;
+      });
+      return state;
+    },
   },
 });
 export const {
@@ -42,6 +49,7 @@ export const {
   donetLoading,
   addNewPost,
   updatePost,
+  deletePost,
 } = postSlice.actions;
 
 export default postSlice.reducer;
@@ -73,6 +81,17 @@ export const updatePostAsync = (id, post) => async (dispatch) => {
     dispatch(startLoading());
     await api.updatePost(id, post);
     dispatch(updatePost({ ...post }));
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePostAsync = (id) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    await api.deletePost(id);
+    dispatch(deletePost(id));
     dispatch(donetLoading());
   } catch (error) {
     throw error;

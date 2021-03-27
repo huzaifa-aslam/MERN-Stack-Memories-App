@@ -31,6 +31,7 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
     } else {
       dispatch(createPostsAsync(formData));
     }
+    clear()
   };
 
   const handleChange = (e) => {
@@ -41,7 +42,10 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
     }));
   };
 
-  const clear = () => {};
+  const clear = () => {
+    setCurrentPostId(null)
+    setFormData({...INITIAL_STATE})
+  };
   return (
     <Paper className={classes.paper}>
       <form
@@ -50,7 +54,7 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
         className={`${classes.form} ${classes.root}`}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">Creating a Memory</Typography>
+        <Typography variant="h6">{currentPostId ? 'Updating a Memory' : 'Creating a Memory'}</Typography>
         <TextField
           name="creator"
           variant="outlined"
