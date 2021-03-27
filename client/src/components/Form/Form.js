@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles";
+import { useSelector, useDispatch } from "react-redux";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPostsAsync } from "../../store/reducers/posts";
+import { createPostsAsync, updatePostAsync } from "../../store/reducers/posts";
 const INITIAL_STATE = {
   creator: "",
   title: "",
@@ -11,29 +11,37 @@ const INITIAL_STATE = {
   tags: "",
   selectedFile: "",
 };
-const Form = () => {
-
+const Form = ({ currentPostId, setCurrentPostId }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
+  const { posts } = useSelector((state) => {
+    return state.posts;
+  });
+  useEffect(() => {
+    if (posts && currentPostId) {
+      const findPost = posts.find((post) => post._id === currentPostId);
+      setFormData(findPost);
+    }
+  }, [posts, currentPostId]);
   const classes = useStyles();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
-    e.preventDefault()
-
-    dispatch(createPostsAsync(formData))
+    e.preventDefault();
+    if (currentPostId) {
+      dispatch(updatePostAsync(currentPostId, formData));
+    } else {
+      dispatch(createPostsAsync(formData));
+    }
   };
- 
 
   const handleChange = (e) => {
-      console.log(e.target.value);
+    console.log(e.target.value);
     setFormData((prevField) => ({
       ...prevField,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const clear = () => {
-
-  }
+  const clear = () => {};
   return (
     <Paper className={classes.paper}>
       <form
@@ -91,14 +99,18 @@ const Form = () => {
           size="large"
           type="submit"
           fullWidth
-        >Submit</Button>
-          <Button
+        >
+          Submit
+        </Button>
+        <Button
           variant="contained"
           color="secondary"
           size="small"
           fullWidth
           onClick={clear}
-        >Clear</Button>
+        >
+          Clear
+        </Button>
       </form>
     </Paper>
   );
