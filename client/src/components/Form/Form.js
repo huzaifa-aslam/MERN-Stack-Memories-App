@@ -26,10 +26,15 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
+    const convertTagsIntoArray = formData.tags.split(" ")
+    const updatedFormData= {
+      ...formData,
+      tags: convertTagsIntoArray
+    }
     if (currentPostId) {
-      dispatch(updatePostAsync(currentPostId, formData));
+      dispatch(updatePostAsync(currentPostId, updatedFormData));
     } else {
-      dispatch(createPostsAsync(formData));
+      dispatch(createPostsAsync(updatedFormData));
     }
     clear()
   };
