@@ -41,6 +41,16 @@ const postSlice = createSlice({
       });
       return state;
     },
+    likePost: (state, action) => {
+      const post = action.payload;
+      const spread = {...post, likeCount: post.likeCount + 1}
+      state.posts?.forEach((item, idx) => {
+        if (item._id === post._id && state.posts) {
+          state.posts[idx] = { ...post, likeCount: post.likeCount + 1};
+        }
+      });
+      return state;
+    },
   },
 });
 export const {
@@ -50,6 +60,7 @@ export const {
   addNewPost,
   updatePost,
   deletePost,
+  likePost,
 } = postSlice.actions;
 
 export default postSlice.reducer;
@@ -91,7 +102,7 @@ export const likePostAsync = (post) => async (dispatch) => {
   try {
     dispatch(startLoading());
     await api.likePost(post._id);
-    dispatch(updatePost({ ...post }));
+    dispatch(likePost({ ...post }));
     dispatch(donetLoading());
   } catch (error) {
     throw error;
