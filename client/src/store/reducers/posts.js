@@ -45,7 +45,7 @@ const postSlice = createSlice({
       const post = action.payload;
       state.posts?.forEach((item, idx) => {
         if (item._id === post._id && state.posts) {
-          state.posts[idx] = { ...post, likeCount: post.likeCount + 1};
+          state.posts[idx] = { ...post, likeCount: post.likeCount + 1 };
         }
       });
       return state;
