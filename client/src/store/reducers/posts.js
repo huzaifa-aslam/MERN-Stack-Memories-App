@@ -43,7 +43,6 @@ const postSlice = createSlice({
     },
     likePost: (state, action) => {
       const post = action.payload;
-      const spread = {...post, likeCount: post.likeCount + 1}
       state.posts?.forEach((item, idx) => {
         if (item._id === post._id && state.posts) {
           state.posts[idx] = { ...post, likeCount: post.likeCount + 1};
