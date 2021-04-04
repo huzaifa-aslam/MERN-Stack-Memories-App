@@ -1,40 +1,20 @@
-import React, { useState } from "react";
-import { Container, Grow, Grid } from "@material-ui/core";
-import Form from "./components/Form/Form";
-import Posts from "./components/Posts/Posts";
+import React from "react";
+import { Container } from "@material-ui/core";
 import NavBar from "./components/NavBar/NavBar";
-import useStyles from "./styles";
+import Home from "./components/Home/Home";
+import Auth from "./components/Auth/Auth";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const App = () => {
-  const [currentPostId, setCurrentPostId] = useState(null);
-  const classes = useStyles();
   return (
+    <Router>
     <Container maxWidth="lg">
-      <NavBar/>
-      <Grow in>
-        <Container>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="stretch"
-            spacing={3}
-            className={classes.mainContaier}
-          >
-            <Grid item xs={12} sm={7}>
-              <Posts
-                currentPostId={currentPostId}
-                setCurrentPostId={setCurrentPostId}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Form
-                currentPostId={currentPostId}
-                setCurrentPostId={setCurrentPostId}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-      </Grow>
+      <NavBar />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/auth" exact component={Auth} />
+      </Switch>
     </Container>
+    </Router>
   );
 };
 
