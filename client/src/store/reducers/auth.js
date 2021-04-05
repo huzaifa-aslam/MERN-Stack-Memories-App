@@ -20,9 +20,18 @@ const authSlice = createSlice({
       state.auth = auth;
       state.isLoading = false;
     },
+    clearAuth: (state) => {
+      state.auth = null;
+      state.isLoading = false;
+    },
   },
 });
-export const { startLoading, donetLoading, addAuth } = authSlice.actions;
+export const {
+  startLoading,
+  donetLoading,
+  addAuth,
+  clearAuth,
+} = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -30,6 +39,36 @@ export const addAuthAsync = (auth) => async (dispatch) => {
   try {
     dispatch(startLoading());
     dispatch(addAuth(auth));
+    localStorage.setItem("profile", JSON.stringify({ ...auth }));
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const clearAuthAsync = () => (dispatch) => {
+  try {
+    dispatch(startLoading());
+    dispatch(clearAuth());
+    localStorage.clear();
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const signInAsync = () => (dispatch) => {
+  try {
+    dispatch(startLoading());
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const signUpAsync = () => (dispatch) => {
+  try {
+    dispatch(startLoading());
     dispatch(donetLoading());
   } catch (error) {
     throw error;

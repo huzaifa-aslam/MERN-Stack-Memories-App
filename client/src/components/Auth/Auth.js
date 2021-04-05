@@ -6,22 +6,37 @@ import {
   Paper,
   Grid,
   Button,
-  Icon,
 } from "@material-ui/core";
+import Icon from "./Icon";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addAuthAsync } from "../../store/reducers/auth";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
 import useStyles from "./styles";
+
+const INITIAL_STATE = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ ...INITIAL_STATE });
   const [isSignup, setIsSignUp] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const handleSubmit = () => {};
+  const { push } = useHistory();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -34,7 +49,7 @@ const Auth = () => {
     const result = res?.profileObj;
     const token = res?.tokenId;
     dispatch(addAuthAsync({ result, token }));
-    console.log(res);
+    push("/");
   };
   const googleFailure = () => {
     console.log("Google sign in was un successfull!");
@@ -107,7 +122,7 @@ const Auth = () => {
                 color="primary"
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
-                // startIcon={<Icon />}
+                startIcon={<Icon />}
                 variant="contained"
               >
                 Google Sign In

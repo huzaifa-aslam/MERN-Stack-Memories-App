@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AppBar, Button, Toolbar, Typography, Avatar } from "@material-ui/core";
 import memories from "../../images/memories.png";
 import { Link } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearAuthAsync } from "../../store/reducers/auth";
 import useStyles from "./styles";
 const NavBar = () => {
   const classes = useStyles();
-  const user = null;
+  const { push } = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  const logOut = () => {
+    dispatch(clearAuthAsync());
+    push("/");
+    setUser(null);
+  };
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <div className={classes.brandContainer}>
@@ -29,25 +43,31 @@ const NavBar = () => {
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
-              alt={user.result.name}
-              src={user.result.imageUrl}
+              alt={user?.result.name}
+              src={user?.result.imageUrl}
             >
               {user.result.name.charAt(0)}
             </Avatar>
             <Typography className={classes.userName} variant="h6">
-              {user.result.name}
+              {user?.result.name}
             </Typography>
             <Button
               component={Link}
               variant="container"
               className={classes.logout}
               color="secondary"
+              onClick={logOut}
             >
               Logout
             </Button>
           </div>
         ) : (
-          <Button component={Link} to="/auth" variant="contained" color="primary">
+          <Button
+            component={Link}
+            to="/auth"
+            variant="contained"
+            color="primary"
+          >
             Sign In
           </Button>
         )}
