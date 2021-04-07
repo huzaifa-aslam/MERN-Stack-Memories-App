@@ -57,7 +57,6 @@ const Post = ({ post, currentPostId, setCurrentPostId }) => {
       </CardContent>
       <CardActions className={classes.cardActions}>
         <Button
-          disabled={true}
           size="small"
           color="primary"
           onClick={() => {

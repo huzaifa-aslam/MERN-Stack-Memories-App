@@ -10,11 +10,16 @@ import {
 import Icon from "./Icon";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addAuthAsync } from "../../store/reducers/auth";
+import {
+  addAuthAsync,
+  signInAsync,
+  signUpAsync,
+} from "../../store/reducers/auth";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
 import useStyles from "./styles";
+import { signIn } from "../../api";
 
 const INITIAL_STATE = {
   firstName: "",
@@ -32,6 +37,19 @@ const Auth = () => {
   const { push } = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSignup) {
+      dispatch(
+        signUpAsync(formData, () => {
+          push("/");
+        })
+      );
+    } else {
+      dispatch(
+        signInAsync(formData, () => {
+          push("/");
+        })
+      );
+    }
   };
 
   const handleChange = (e) => {

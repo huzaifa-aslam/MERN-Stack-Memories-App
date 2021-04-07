@@ -57,18 +57,26 @@ export const clearAuthAsync = () => (dispatch) => {
   }
 };
 
-export const signInAsync = () => (dispatch) => {
+export const signInAsync = (formData, cb) => async (dispatch) => {
   try {
     dispatch(startLoading());
+    const { data } = await api.signIn(formData);
+    dispatch(addAuth(data));
+    localStorage.setItem("profile", JSON.stringify({ ...data }));
+    cb();
     dispatch(donetLoading());
   } catch (error) {
     throw error;
   }
 };
 
-export const signUpAsync = () => (dispatch) => {
+export const signUpAsync = (formData, cb) => async (dispatch) => {
   try {
     dispatch(startLoading());
+    const { data } = await api.signUp(formData);
+    dispatch(addAuth(data));
+    localStorage.setItem("profile", JSON.stringify({ ...data }));
+    cb();
     dispatch(donetLoading());
   } catch (error) {
     throw error;
