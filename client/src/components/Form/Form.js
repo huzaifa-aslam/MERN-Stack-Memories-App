@@ -5,7 +5,6 @@ import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
 import { createPostsAsync, updatePostAsync } from "../../store/reducers/posts";
 const INITIAL_STATE = {
-  creator: "",
   title: "",
   message: "",
   tags: "",
@@ -13,6 +12,7 @@ const INITIAL_STATE = {
 };
 const Form = ({ currentPostId, setCurrentPostId }) => {
   const [formData, setFormData] = useState({ ...INITIAL_STATE });
+  const user = JSON.parse(localStorage.getItem("profile"));
   const { posts } = useSelector((state) => {
     return state.posts;
   });
@@ -26,17 +26,24 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const convertTagsIntoArray = formData.tags.split(" ")
-    const updatedFormData= {
+    const convertTagsIntoArray = formData.tags.split(" ");
+    const updatedFormData = {
       ...formData,
-      tags: convertTagsIntoArray
-    }
+      tags: convertTagsIntoArray,
+    };
     if (currentPostId) {
-      dispatch(updatePostAsync(currentPostId, updatedFormData));
+      dispatch(
+        updatePostAsync(currentPostId, {
+          ...updatedFormData,
+          name: user?.result?.name,
+        })
+      );
     } else {
-      dispatch(createPostsAsync(updatedFormData));
+      dispatch(
+        createPostsAsync({ ...updatedFormData, name: user?.result?.name })
+      );
     }
-    clear()
+    clear();
   };
 
   const handleChange = (e) => {
@@ -48,9 +55,19 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
   };
 
   const clear = () => {
-    setCurrentPostId(null)
-    setFormData({...INITIAL_STATE})
+    setCurrentPostId(null);
+    setFormData({ ...INITIAL_STATE });
   };
+  if (!user?.result?.name) {
+    return (
+      <Paper classes={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please sign in first to create your own memories or like other's
+          memories
+        </Typography>
+      </Paper>
+    );
+  }
   return (
     <Paper className={classes.paper}>
       <form
@@ -59,15 +76,9 @@ const Form = ({ currentPostId, setCurrentPostId }) => {
         className={`${classes.form} ${classes.root}`}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">{currentPostId ? 'Updating a Memory' : 'Creating a Memory'}</Typography>
-        <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={formData.creator}
-          onChange={handleChange}
-        />
+        <Typography variant="h6">
+          {currentPostId ? "Updating a Memory" : "Creating a Memory"}
+        </Typography>
         <TextField
           name="title"
           variant="outlined"

@@ -19,7 +19,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
 import useStyles from "./styles";
-import { signIn } from "../../api";
 
 const INITIAL_STATE = {
   firstName: "",
