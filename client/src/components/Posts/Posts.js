@@ -5,7 +5,7 @@ import { fetchPostsAsync } from "../../store/reducers/posts";
 import { Grid, CircularProgress } from "@material-ui/core";
 import useStyles from "./styles";
 const Posts = ({ currentPostId, setCurrentPostId }) => {
-  const { posts } = useSelector((state) => {
+  const { isLoading, posts } = useSelector((state) => {
     return state.posts;
   });
   const classes = useStyles();
@@ -17,29 +17,27 @@ const Posts = ({ currentPostId, setCurrentPostId }) => {
   }, [dispatch, posts]);
   return (
     <>
-      {posts.length ? (
-        !posts.length ? (
-          <CircularProgress />
-        ) : (
-          <Grid
-            className={classes.container}
-            container
-            alignItems="stretch"
-            spacing={3}
-          >
-            {posts?.map((post) => (
-              <Grid key={post._id} item xs={12} sm={6}>
-                <Post
-                  post={post}
-                  currentPostId={currentPostId}
-                  setCurrentPostId={setCurrentPostId}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )
+      {/* {isLoading && <CircularProgress />} */}
+
+      {posts?.length ? (
+        <Grid
+          className={classes.container}
+          container
+          alignItems="stretch"
+          spacing={3}
+        >
+          {posts?.map((post) => (
+            <Grid key={post._id} item xs={12} sm={6}>
+              <Post
+                post={post}
+                currentPostId={currentPostId}
+                setCurrentPostId={setCurrentPostId}
+              />
+            </Grid>
+          ))}
+        </Grid>
       ) : (
-        ""
+        "No posts found"
       )}
     </>
   );
