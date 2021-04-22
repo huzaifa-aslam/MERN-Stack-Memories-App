@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import Post from "./Post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPostsAsync } from "../../store/reducers/posts";
-import { Grid, CircularProgress } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import useStyles from "./styles";
 const Posts = ({ currentPostId, setCurrentPostId }) => {
-  const { isLoading, posts } = useSelector((state) => {
+  const { posts } = useSelector((state) => {
     return state.posts;
   });
   const classes = useStyles();
@@ -17,8 +17,6 @@ const Posts = ({ currentPostId, setCurrentPostId }) => {
   }, [dispatch, posts]);
   return (
     <>
-      {/* {isLoading && <CircularProgress />} */}
-
       {posts?.length ? (
         <Grid
           className={classes.container}
