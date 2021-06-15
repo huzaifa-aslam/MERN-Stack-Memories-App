@@ -64,6 +64,18 @@ export const {
 
 export default postSlice.reducer;
 
+export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+
+    const data = await api.fetchPostsBySearch(searchQuery);
+
+    console.log("data", data);
+    dispatch(donetLoading());
+  } catch (error) {
+    throw error;
+  }
+};
 export const fetchPostsAsync = () => async (dispatch) => {
   try {
     dispatch(startLoading());
