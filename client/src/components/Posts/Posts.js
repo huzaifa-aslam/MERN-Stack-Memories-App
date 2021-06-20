@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import Post from "./Post/Post";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPostsAsync } from "../../store/reducers/posts";
-import { Grid } from "@material-ui/core";
+import { Grid, CircularProgress } from "@material-ui/core";
 import useStyles from "./styles";
 const Posts = ({ currentPostId, setCurrentPostId }) => {
-  const { posts } = useSelector((state) => {
+  const { posts, isLoading } = useSelector((state) => {
     return state.posts;
   });
   const classes = useStyles();
@@ -15,9 +15,14 @@ const Posts = ({ currentPostId, setCurrentPostId }) => {
       dispatch(fetchPostsAsync());
     }
   }, [dispatch, posts]);
+  if (!posts.length && !isLoading) {
+    return "no posts found";
+  }
   return (
     <>
-      {posts?.length ? (
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
         <Grid
           className={classes.container}
           container
@@ -25,7 +30,7 @@ const Posts = ({ currentPostId, setCurrentPostId }) => {
           spacing={3}
         >
           {posts?.map((post) => (
-            <Grid key={post._id} item xs={12} sm={6}>
+            <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
               <Post
                 post={post}
                 currentPostId={currentPostId}
@@ -34,8 +39,6 @@ const Posts = ({ currentPostId, setCurrentPostId }) => {
             </Grid>
           ))}
         </Grid>
-      ) : (
-        "No posts found"
       )}
     </>
   );

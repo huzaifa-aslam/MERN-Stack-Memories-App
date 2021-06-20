@@ -38,6 +38,7 @@ const Home = () => {
   const searchPost = () => {
     if (search.trim()) {
       dispatch(getPostsBySearch({ search }));
+      history.push(`/posts/search?searchQuery=${search || "none"}`);
     } else {
       history.push("/");
     }
@@ -86,7 +87,7 @@ const Home = () => {
               setCurrentPostId={setCurrentPostId}
             />
             <Paper>
-              <Paginate elevation={6} />
+              <Paginate page={page} elevation={6} />
             </Paper>
           </Grid>
         </Grid>

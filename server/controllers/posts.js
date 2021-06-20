@@ -1,11 +1,18 @@
 import mongoose from "mongoose";
 import PostMessaeg from "../models/postMessage.js";
 
-export const getPostsBySearch = (req, res) => {
+export const getPostsBySearch = async (req, res) => {
+  const { searchQuery } = req.query;
+  const test = ["a", "b", "c"];
   try {
-    console.log("req", req.query);
-    // const {searchQuery} = req.
-  } catch (error) {}
+    const title = new RegExp(searchQuery, "i");
+    const posts = await PostMessaeg.find({ title });
+    // console.log("searchQuery", searchQuery);
+    console.log("posts", posts);
+    res.json({ data: posts });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const getPosts = async (req, res) => {
